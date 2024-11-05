@@ -8,8 +8,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        build-essential lsb-release curl wget gawk xxd cpio bc tftpd-hpa net-tools \
-        xterm autoconf libtool python3 expect less rsync texinfo libncurses5-dev \
+        build-essential lsb-release libtinfo5 curl wget gawk xxd cpio bc tftpd-hpa net-tools \
+        xterm autoconf libtool python3 dnsutils expect less rsync texinfo libncurses5-dev \
         zlib1g:i386 zlib1g-dev gcc-multilib locales git ca-certificates sudo && \
     rm -rf /var/lib/apt/lists/* && apt-get clean && \
     locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && \
@@ -35,4 +35,3 @@ RUN sudo chmod +x petalinux-v2024.1-05202009-installer.run install_petalinux.exp
 
 # Set bash as the default shell for the container
 CMD ["bash", "--login"]
-
