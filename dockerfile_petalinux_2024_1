@@ -1,0 +1,37 @@
+# Use the official Ubuntu 22.04 as the base image
+FROM ubuntu:22.04
+
+# Set environment variables to avoid interactive prompts during installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update package list, install required packages, clean up, configure locales 
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+        build-essential lsb-release curl wget gawk xxd cpio bc tftpd-hpa net-tools \
+        xterm autoconf libtool python3 less rsync texinfo libncurses5-dev \
+        zlib1g:i386 zlib1g-dev gcc-multilib locales git ca-certificates sudo && \
+    rm -rf /var/lib/apt/lists/* && apt-get clean && \
+    locale-gen en_US.UTF-8 && sudo update-locale LANG=en_US.UTF-8 && \
+    useradd -ms /bin/bash fpga_helper && \
+    echo 'fpga_helper ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && \
+    mkdir -p /opt/tools/Xilinx/petalinux && \
+    chown -R fpga_helper:fpga_helper /opt/tools /home/fpga_helper
+	
+# Switch to non-root user for all subsequent instructions
+USER fpga_helper
+
+# Set the working directory where the Petalinux installer is located
+WORKDIR /home/fpga_helper/	
+
+# Copy the Petalinux installer and expect script into the container
+COPY petalinux-v2024.1-05202009-installer.run 			/home/fpga_helper/petalinux-installer.run
+COPY xilinx-kv260-starterkit-v2024.1-05230256.bsp 		/home/fpga_helper/
+
+RUN sudo chmod +x /home/fpga_helper/petalinux-installer.run && \
+    /home/fpga_helper/petalinux-installer.run -y /opt/tools/Xilinx/petalinux && \
+    rm -f /home/fpga_helper/petalinux-installer.run
+
+# Set bash as the default shell for the container
+CMD ["bash", "--login"]
+

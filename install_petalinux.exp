@@ -1,0 +1,29 @@
+#!/usr/bin/env expect
+set timeout -1
+set run_file [lindex $argv 0]
+set install_dir [lindex $argv 1]
+set version [lindex $argv 2]
+
+# Start the installer
+spawn ./$run_file -d $install_dir
+
+# Handle terminal limitations with license prompts
+expect {
+    "Press Enter to display the license agreements" {
+        send "\r"
+        exp_continue
+    }
+    "*>*" {
+        send "y\r"
+        exp_continue
+    }
+    "WARNING: terminal is not fully functional" {
+        send "q\r"
+        exp_continue
+    }
+    "*has been installed to*" {
+        send_user "Installation completed.\n"
+    }
+}
+exit
+
