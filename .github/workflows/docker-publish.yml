@@ -30,6 +30,8 @@ jobs:
           - dockerfile: dockerfile_petalinux_2024_1
             version: 2024.1
 
+    continue-on-error: true
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
