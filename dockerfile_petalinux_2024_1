@@ -27,7 +27,6 @@ WORKDIR /home/fpga_helper/
 # Copy the Petalinux installer and expect script into the container
 COPY petalinux-v2024.1-05202009-installer.run 			/home/fpga_helper/
 COPY install_petalinux.exp 					/home/fpga_helper/
-COPY xilinx-kv260-starterkit-v2024.1-05230256.bsp 		/home/fpga_helper/
 
 RUN sudo chmod +x petalinux-v2024.1-05202009-installer.run install_petalinux.exp && \
     ./install_petalinux.exp petalinux-v2024.1-05202009-installer.run /opt/tools/Xilinx/petalinux 2024.1 && \
