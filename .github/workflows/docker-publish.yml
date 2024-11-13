@@ -30,8 +30,6 @@ jobs:
           - dockerfile: dockerfile_petalinux_2024_1
             version: 2024.1
 
-    continue-on-error: true
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -60,17 +58,16 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5.0.0
-        with:
-          context: .
-          file: ${{ matrix.dockerfile }}
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: orenderj/petalinux:${{ matrix.version }}
-          build-args: |
-            INSTALLER_PATH=${{ env.INSTALLER_PATH }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+        run: |
+          docker buildx build \
+            --build-arg INSTALLER_PATH=/mnt/installer \
+            --file ${{ matrix.dockerfile }} \
+            --tag orenderj/petalinux:${{ matrix.version }} \
+            --push \
+            --label "${{ steps.meta.outputs.labels }}" \
+            --cache-from type=gha \
+            --cache-to type=gha,mode=max \
+            --mount type=bind,source=/home/orenderj/fpga_helper/petalinux-v${{ matrix.version }}-final-installer.run,target=/mnt/installer/petalinux-installer.run .
 
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
