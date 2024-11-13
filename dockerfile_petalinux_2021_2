@@ -1,6 +1,9 @@
 # Use the official Ubuntu 18.04 as the base image
 FROM ubuntu:18.04
 
+# Comes in from our build workflow
+ARG INSTALLER_PATH
+
 # Set environment variables to avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -25,9 +28,8 @@ USER fpga_helper
 WORKDIR /home/fpga_helper/	
 
 # Copy the Petalinux installer and expect script into the container
-COPY petalinux-v2021.2-final-installer.run 			/home/fpga_helper/
+COPY ${INSTALLER_PATH}/petalinux-v2021.2-final-installer.run 			/home/fpga_helper/
 COPY install_petalinux.exp 					/home/fpga_helper/
-COPY xilinx-k26-som-v2021.2-final.bsp 				/home/fpga_helper/
 
 RUN sudo chmod +x petalinux-v2021.2-final-installer.run install_petalinux.exp && \
     ./install_petalinux.exp petalinux-v2021.2-final-installer.run /opt/tools/Xilinx/petalinux 2021.2 && \
