@@ -31,9 +31,9 @@ WORKDIR /home/fpga_helper/
 COPY ${INSTALLER_PATH}petalinux-v2023.1-05012318-installer.run 			/home/fpga_helper/
 COPY install_petalinux.exp 					/home/fpga_helper/
 
-RUN sudo chmod +x petalinux-v2023.1-05012318-installer.run install_petalinux.exp && \
-    ./install_petalinux.exp petalinux-v2023.1-05012318-installer.run /opt/tools/Xilinx/petalinux 2023.1 && \
-    rm -f petalinux-v2023.1-05012318-installer.run install_petalinux.exp
+RUN sudo chmod +x petalinux-v2023.1-final-installer.run install_petalinux.exp && \
+    ./install_petalinux.exp petalinux-v2023.1-final-installer.run /opt/tools/Xilinx/petalinux 2023.1 && \
+    rm -f petalinux-v2023.1-final-installer.run install_petalinux.exp
 
 # Perform the PetaLinux upgrade in the current shell session
 RUN bash -c "source /opt/tools/Xilinx/petalinux/settings.sh && \
