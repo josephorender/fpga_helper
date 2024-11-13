@@ -67,7 +67,7 @@ jobs:
             --label "${{ steps.meta.outputs.labels }}" \
             --cache-from type=gha \
             --cache-to type=gha,mode=max \
-            --mount type=bind,source=/home/orenderj/fpga_helper/petalinux-v${{ matrix.version }}-final-installer.run,target=/mnt/installer/petalinux-installer.run .
+            --mount type=bind,source=${{ env.INSTALLER_PATH }}/petalinux-v${{ matrix.version }}-final-installer.run,target=/mnt/installer/petalinux-installer.run .
 
       - name: Sign the published Docker image
         if: ${{ github.event_name != 'pull_request' }}
