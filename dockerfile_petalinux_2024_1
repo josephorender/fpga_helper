@@ -28,12 +28,12 @@ USER fpga_helper
 WORKDIR /home/fpga_helper/	
 
 # Copy the Petalinux installer and expect script into the container
-COPY ${INSTALLER_PATH}/petalinux-v2024.1-05202009-installer.run 			/home/fpga_helper/
-COPY install_petalinux.exp 					/home/fpga_helper/
+COPY ${INSTALLER_PATH}/petalinux-v2024.1-final-installer.run 			/home/fpga_helper/
+COPY install_petalinux.exp 							/home/fpga_helper/
 
-RUN sudo chmod +x petalinux-v2024.1-05202009-installer.run install_petalinux.exp && \
-    ./install_petalinux.exp petalinux-v2024.1-05202009-installer.run /opt/tools/Xilinx/petalinux 2024.1 && \
-    rm -f petalinux-v2024.1-05202009-installer.run install_petalinux.exp
+RUN sudo chmod +x petalinux-v2024.1-final-installer.run install_petalinux.exp && \
+    ./install_petalinux.exp petalinux-v2024.1-final-installer.run /opt/tools/Xilinx/petalinux 2024.1 && \
+    rm -f petalinux-v2024.1-final-installer.run install_petalinux.exp
 
 # Set bash as the default shell for the container
 CMD ["bash", "--login"]
