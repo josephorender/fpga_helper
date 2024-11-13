@@ -52,11 +52,6 @@ jobs:
           docker build \
             --build-arg INSTALLER_NAME=petalinux-v${{ matrix.version }}-final-installer.run \
             --file ${{ matrix.dockerfile }} \
-            --tag orenderj/petalinux:${{ matrix.version }} \
+            --tag orenderj/petalinux:v${{ matrix.version }} \
             .
-          docker push orenderj/petalinux:${{ matrix.version }}
-
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          cosign sign --yes orenderj/petalinux:${{ matrix.version }}
+          docker push orenderj/petalinux:v${{ matrix.version }}
