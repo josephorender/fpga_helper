@@ -1,6 +1,9 @@
 # Use the official Ubuntu 22.04 as the base image
 FROM ubuntu:22.04
 
+# Comes in from our build workflow
+ARG INSTALLER_PATH
+
 # Set environment variables to avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -25,7 +28,7 @@ USER fpga_helper
 WORKDIR /home/fpga_helper/	
 
 # Copy the Petalinux installer and expect script into the container
-COPY petalinux-v2024.1-05202009-installer.run 			/home/fpga_helper/
+COPY ${INSTALLER_PATH}/petalinux-v2024.1-05202009-installer.run 			/home/fpga_helper/
 COPY install_petalinux.exp 					/home/fpga_helper/
 
 RUN sudo chmod +x petalinux-v2024.1-05202009-installer.run install_petalinux.exp && \
